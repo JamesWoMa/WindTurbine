@@ -121,7 +121,6 @@ def mimic_qualtrics(filename, qualtrics_file, labelled_file, all_data, all_label
       next(reader, None)
       next(reader, None)
       for rows in reader:
-        #normalized = " " + re.sub(r"[^A-Za-z ]+", '', rows[QUALTRICS_COMMENT_COLUMN]).lower()
         normalized = re.sub(r"[^A-Za-z ]+", '', rows[QUALTRICS_COMMENT_COLUMN]).lower().strip()
         if normalized in inverse_mapping:
           mapped = inverse_mapping[normalized]
@@ -162,12 +161,6 @@ def split_folds(X_train, y_train, num_folds):
 
     validation_size = X_train.shape[0] // num_folds
     training_size = X_train.shape[0] - validation_size
-    '''
-    X_trains = np.zeros((num_folds, training_size, X_train.shape[1]))
-    y_trains = np.zeros((num_folds, training_size), dtype=np.int)
-    X_vals = np.zeros((num_folds, validation_size, X_train.shape[1]))
-    y_vals = np.zeros((num_folds, validation_size), dtype=np.int)
-    '''
     X_trains = np.empty([num_folds, training_size, X_train.shape[1]], dtype="S1000")
     y_trains = np.zeros((num_folds, training_size), dtype=np.int)
     X_vals = np.empty([num_folds, validation_size, X_train.shape[1]], dtype="S1000")
@@ -509,13 +502,7 @@ def write_csv_mixed(val_messages, val_labels, naive_bayes_predictions, trial, co
         writer_confusion.writerow(['Negative', num_neg_pos/total_neg, num_neg_neg/total_neg, num_neg_other/total_neg])
         total_other = num_other_pos+num_other_neg+num_other_other
         writer_confusion.writerow(['Other', num_other_pos/total_other, num_other_neg/total_other, num_other_other/total_other])
-      '''
-      print('')
-      print("True labels\tPositive\tNegative\tOther")
-      print("Positive\t", num_pos_pos/(num_pos_pos+num_pos_neg+num_pos_other), '\t', num_pos_neg/(num_pos_pos+num_pos_neg+num_pos_other), '\t', num_pos_other/(num_pos_pos+num_pos_neg+num_pos_other))
-      print("Negative\t", num_neg_pos/(num_neg_pos+num_neg_neg+num_neg_other), '\t', num_neg_neg/(num_neg_pos+num_neg_neg+num_neg_other), '\t', num_neg_other/(num_neg_pos+num_neg_neg+num_neg_other))
-      print("Other\t", num_other_pos/(num_other_pos+num_other_neg+num_other_other), '\t', num_other_neg/(num_other_pos+num_other_neg+num_other_other), '\t', num_other_other/(num_other_pos+num_other_neg+num_other_other))
-      '''
+
     else:
       filename = 'results'+str(trial)+'.csv'
       with open(filename, 'w') as writeFile:
@@ -541,7 +528,7 @@ def plot_frequent_words(labels, aggregator):
       plt.ylabel("Word")
       plt.xlabel("Top Word Count")
       plt.title(title_string+' Label Top Words')
-      plt.savefig(title_string+'_label_frequent_words.png')
+      plt.savefig("./results/"title_string+'_label_frequent_words.png')
 
 def fit_naive_bayes_model(matrix, labels, possibles):
     """Fit a naive bayes model.
@@ -667,7 +654,7 @@ def train_test():
     val_matrix = transform_text(val_messages, dictionary)
 
     if MODEL_CHOICE is "LOGREG":
-      
+
       logreg = LogisticRegression()
       logreg.fit(train_matrix, train_labels)
 
