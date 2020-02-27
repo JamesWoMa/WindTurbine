@@ -404,7 +404,7 @@ def write_csv_results(val_messages, val_labels, naive_bayes_predictions, trial, 
 def write_csv_mixed(val_messages, val_labels, naive_bayes_predictions, trial, confusion_matrix = False):
     """Write CSV file containing message, true label, and predicted label
     """
-    filename = 'results'+str(trial)+'.csv'
+    filename = '../results/results'+str(trial)+'.csv'
     try:
       os.remove(filename)
     except OSError:
@@ -528,7 +528,7 @@ def plot_frequent_words(labels, aggregator):
       plt.ylabel("Word")
       plt.xlabel("Top Word Count")
       plt.title(title_string+' Label Top Words')
-      plt.savefig("./results/"title_string+'_label_frequent_words.png')
+      plt.savefig("../results/"+title_string+'_label_frequent_words.png')
 
 def fit_naive_bayes_model(matrix, labels, possibles):
     """Fit a naive bayes model.
@@ -619,7 +619,7 @@ def predict_from_off_shelf_model(model, messages):
 
 def train_test():
 
-  all_data, all_labels = extract_csv('comments.csv', LABELS, CATEGORY)
+  all_data, all_labels = extract_csv('../data/comments.csv', LABELS, CATEGORY)
   all_data = np.asarray(all_data)
   all_labels = np.asarray(all_labels)
 
@@ -665,7 +665,7 @@ def train_test():
       logistic_regresion_accuracy = np.mean(logistic_regresion_predictions == val_labels)
       print('Logistic Regression had an accuracy of {} on the testing set'.format(logistic_regresion_accuracy))
       #get_top_five_logistic_regresion_words(logreg, dictionary, aggregator)
-      write_csv_mixed(val_messages, val_labels, logistic_regresion_predictions, trial, CONFUSION_MATRIX_OPTION)
+      #write_csv_mixed(val_messages, val_labels, logistic_regresion_predictions, trial, CONFUSION_MATRIX_OPTION)
 
 
 
@@ -675,7 +675,7 @@ def train_test():
       naive_bayes_accuracy = np.mean(naive_bayes_predictions == val_labels)
       print('Naive Bayes had an accuracy of {} on the testing set'.format(naive_bayes_accuracy))
       get_top_five_logistic_regresion_words(naive_bayes_model, dictionary, aggregator)
-      write_csv_mixed(val_messages, val_labels, naive_bayes_predictions, trial, CONFUSION_MATRIX_OPTION)
+      #write_csv_mixed(val_messages, val_labels, naive_bayes_predictions, trial, CONFUSION_MATRIX_OPTION)
 
     elif MODEL_CHOICE is "OFFSHELF":
 
@@ -685,7 +685,7 @@ def train_test():
       sid_predictions = predict_from_off_shelf_model(sid, converted)
       sid_accuracy = np.mean(sid_predictions == val_labels)
       print('Off The Shelf had an accuracy of {} on the testing set'.format(sid_accuracy))
-      write_csv_mixed(val_messages, val_labels, sid_predictions, trial, CONFUSION_MATRIX_OPTION)
+      #write_csv_mixed(val_messages, val_labels, sid_predictions, trial, CONFUSION_MATRIX_OPTION)
 
 
     # Just do this once
@@ -704,7 +704,7 @@ def train_test():
 
 def get_distribution():
 
-  all_data, all_labels = extract_csv('comments.csv', LABELS, CATEGORY)
+  all_data, all_labels = extract_csv('../data/comments.csv', LABELS, CATEGORY)
   all_data = np.asarray([[x] for x in all_data], dtype="S1000")
   all_labels = np.asarray(all_labels)
 
@@ -767,7 +767,7 @@ def get_distribution():
   plt.savefig(MODEL_CHOICE.lower()+"_acc_dist.png")
 
 def get_mode_sentiment():
-  all_data, all_labels = extract_csv('comments.csv', LABELS, CATEGORY)
+  all_data, all_labels = extract_csv('../data/comments.csv', LABELS, CATEGORY)
   all_data = np.asarray([[x] for x in all_data], dtype="S1000")
   all_labels = np.asarray(all_labels)
 
@@ -858,7 +858,7 @@ def get_mode_sentiment():
 
   my_accuracy = np.mean(mode_sentiment == all_labels)
   print("This is the accuracy:",my_accuracy)
-  mimic_qualtrics("mimic_results2.csv", "all_survey_responses.csv", "comments.csv", all_data.flatten(), all_labels, mode_sentiment.astype(int))
+  mimic_qualtrics("../results/mimic_results2.csv", "../data/all_survey_responses.csv", "../data/comments.csv", all_data.flatten(), all_labels, mode_sentiment.astype(int))
 
 
 
